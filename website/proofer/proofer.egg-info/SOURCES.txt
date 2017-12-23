@@ -1,0 +1,7 @@
+MANIFEST.in
+proofer/__init__.py
+proofer.egg-info/PKG-INFO
+proofer.egg-info/SOURCES.txt
+proofer.egg-info/dependency_links.txt
+proofer.egg-info/requires.txt
+proofer.egg-info/top_level.txt

@@ -1,0 +1,2 @@
+graft proofer/templates
+graft proofer/static

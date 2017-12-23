@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Proofer</title>
+	<style type="text/css">body{
+		margin:40px auto;
+		max-width:650px;
+		line-height:1.6;
+		font-size:18px;
+		color:#444;
+		padding:0 10px}
+		h1,h2,h3{line-height:1.2}
+		</style>
+		<script language="JavaScript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		
+
+	</head>
+
+<h1>Amy's Proofing Chamber Control Panel </h1>
+<span>The current temperature is </span><span id="current_temp">N/A</span>
+<span> and the chamber is being </span>
+<span id="running">controlled.</span>
+<br><br>
+<form action="/update_run_status" method="post">
+	<span><input type="submit" name="start_button" value="Start">
+	<input type="submit" name="stop_button" value="Stop">
+	</span>
+
+</form>
+<br>
+<form action="/update_props" method="post">
+	Enter new set point (F):<br>
+	<input type="text" name="set_point" value={{db.set_point}} id="set_point_input">
+	<br>
+	Enter the range (+/-F):<br>
+	<input type="text" name="set_range" value={{db.set_range}} id="range_input">
+	<br><br>
+	<span><input type="submit" name="start_button" value="Update settings">
+</form>
+<br><br>
+<div id="plot_data" style="width:600px;height:400px;"></div>
+<script type = "text/javascript">
+
+		var data_template = 
+		  [{
+		    x: [],
+		    y: [],
+		    type: 'scatter',
+		    mode: 'markers',
+		    name: 'Actual Temp'
+		  },
+		  {x: [],
+		    y: [],
+		    type: 'scatter',
+		    mode: 'line',
+		    name: 'Set Temp'
+		}];
+	  	var xaxis_template ={
+	  		title: 'Time',
+	  	} 
+	  	var yaxis_template = {
+	  		title: 'Temp (F)'
+	  	}
+	  	layout_template = {
+	  		showlegend: true,
+	  		xaxis: xaxis_template,
+	  		yaxis: yaxis_template
+	  	}
+		fig = {data: data_template,
+			layout: layout_template}
+		Plotly.newPlot('plot_data', fig)
+		
+		update_values()
+	
+	
+		var myVar = setInterval(update_values, 2000)
+		
+		function update_values() {
+		        
+		        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+            	$.getJSON($SCRIPT_ROOT+"/_status",
+		            function(result) {
+		            	var running = result.running
+		            	if (running) { 
+		            		$("#running").text("controlled.");
+		            	}
+		            	else{
+		            		$("#running").text("not controlled.");
+		            	}
+
+		            	$("#current_temp").text(Number(Math.round(result.actual_temp+'e2')+'e-2').toFixed(1));
+		            	
+		            	var dataUpdate = {
+		            		x : [result.time_array, result.time_array],
+		            		y : [result.temp_array, result.set_point_array]
+		            	};
+		            	
+		            	Plotly.restyle('plot_data', dataUpdate, [0, 1])
+		            });
+		            	
+		            };
+		</script>
+ </html>
