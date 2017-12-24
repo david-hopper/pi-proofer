@@ -1,0 +1,10 @@
+#!/bin/bash
+# Initializing and running the proofer website
+
+echo "Hello World!"
+cd ~/pi-proofer/website/proofer/proofer
+export FLASK_APP=proofer.py
+export FLASK_DEBUG=true
+
+flask initdb
+flask run --host=0.0.0.0
