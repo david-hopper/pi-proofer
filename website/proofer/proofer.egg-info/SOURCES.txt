@@ -1,7 +1,13 @@
 MANIFEST.in
 proofer/__init__.py
+proofer/fileLock.py
+proofer/proofer.py
 proofer.egg-info/PKG-INFO
 proofer.egg-info/SOURCES.txt
 proofer.egg-info/dependency_links.txt
 proofer.egg-info/requires.txt
 proofer.egg-info/top_level.txt
+proofer/static/update.js
+proofer/templates/layout.html
+proofer/templates/show_status.html
+proofer/templates/test.html

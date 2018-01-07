@@ -9,7 +9,7 @@ app.config.from_object(__name__)
 
 
 app.config.update(dict(
-	DATABASE=os.path.join('/Users/davidhopper/Projects/proof-chamber/status.json'),
+	DATABASE=os.path.join('/home/pi/pi-proofer/status.json'),
 	SECRET_KEY='development key',
 	USERNAME='admin',
 	PASSWORD='password'
@@ -88,3 +88,7 @@ def update_run_status():
 	write_db(db)
 
 	return redirect('/')
+
+
+if __name__ == '__main__':
+	app.run(debug=True, host='0.0.0.0')
