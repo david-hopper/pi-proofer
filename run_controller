@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd controller
+sudo python3 run.py
